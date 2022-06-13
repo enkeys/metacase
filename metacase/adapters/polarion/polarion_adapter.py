@@ -3,18 +3,27 @@ import logging
 from metacase import TestCase
 from metacase.adapter import Adapter, AdapterArgParser
 from metacase.adapters.polarion.args.polarion_args_parser import PolarionArgParser
-from metacase.adapters.polarion.connectors.jira.jira import JiraPopulator
 from metacase.adapters.polarion.polarion_reporter import PolarionReporter
 from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
+from metacase.connectors.jira.jira_connector import JiraPopulator
 
 """
-FMF Adapter for the Polarion ALM tool.
+Adapter for the Polarion ALM tool.
 """
 
 
 # Constants
 ADAPTER_ID = "polarion"
-LOGGER = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
+
+
+def populate_jira(submitted_testcases: list):
+    # Linking Test Case Work items in jira
+    if PolarionArgParser.JIRA_CONFIG:
+        jira = JiraPopulator(PolarionArgParser.JIRA_CONFIG)
+        jira.populate_testcases(submitted_testcases)
+    else:
+        logger.warning("Jira configuration not provided")
 
 
 class PolarionAdapter(Adapter):
@@ -50,9 +59,9 @@ class PolarionAdapter(Adapter):
         # and --submit has been given, submit. Otherwise simply prints the tc.
         #
         if self._reporter and PolarionArgParser.SUBMIT:
-            LOGGER.info("Submitting test case: %s" % ptc.id)
+            logger.info("Submitting test case: %s" % ptc.id)
             tc = self._reporter.submit_testcase(ptc, PolarionArgParser.POPUL_TC)
-            self.populate_jira(tc)
+            populate_jira(tc)
             return ptc
         else:
             print("Dumping test case: %s\n%s\n" % (ptc.id, ptc.to_xml()))
@@ -70,13 +79,13 @@ class PolarionAdapter(Adapter):
         if self._reporter and PolarionArgParser.SUBMIT:
             if PolarionArgParser.ONE_BY_ONE:
                 for ptc in polarion_test_cases:
-                    LOGGER.info("Submitting test case: %s" % ptc.id)
+                    logger.info("Submitting test case: %s" % ptc.id)
                     submitted_tc.append(
                         self._reporter.submit_testcase(ptc, PolarionArgParser.POPUL_TC)
                     )
             else:
                 for ptc in polarion_test_cases:
-                    LOGGER.info("Submitting test case: %s" % ptc.id)
+                    logger.info("Submitting test case: %s" % ptc.id)
                 submitted_tc.extend(
                     self._reporter.submit_testcases(
                         polarion_test_cases, PolarionArgParser.POPUL_TC
@@ -92,12 +101,4 @@ class PolarionAdapter(Adapter):
                     % (PolarionReporter.to_xml(polarion_test_cases))
                 )
 
-        self.populate_jira(submitted_tc)
-
-    def populate_jira(self, submitted_testcases: list):
-        # Linking Test Case Work items in jira
-        if PolarionArgParser.JIRA_CONFIG is not None:
-            jira_pop = JiraPopulator(PolarionArgParser.JIRA_CONFIG)
-            jira_pop.populate_testcases(submitted_testcases)
-        else:
-            LOGGER.warning("Jira configuration not provided")
+        populate_jira(submitted_tc)
