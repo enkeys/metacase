@@ -5,6 +5,8 @@ import sys
 from metacase.adapter import AdapterArgParser
 from metacase.adapters.polarion.utils.polarion_config import PolarionConfig
 
+logger = logging.getLogger(__name__)
+
 """
 Argument parser for the FMF Polarion Adapter.
 """
@@ -71,8 +73,8 @@ class PolarionArgParser(AdapterArgParser):
             # Validates if config file can be parsed
             try:
                 PolarionConfig(PolarionArgParser.CONFIG_FILE)
-            except:
-                print("Unable to parse config file")
+            except ValueError:
+                logger.error("Unable to parse config file")
                 sys.exit(1)
         else:
             self.generate_sample_config(parsed_arguments.generate_config)
