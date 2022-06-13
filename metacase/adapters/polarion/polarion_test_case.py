@@ -1,5 +1,5 @@
 import re
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ElementTree
 from html import escape
 from xml.dom import minidom
 
@@ -7,12 +7,32 @@ from metacase import TestCase
 from metacase.adapters.polarion.utils.polarion_xml import PolarionXmlUtils
 
 # Static styles to be used while rendering HTML tables
-HTML_TABLE_TD_STYLE = "height: 12px;text-align: left;vertical-align: top;line-height: 18px;border: 1px solid #CCCCCC;padding: 5px;"
-HTML_TABLE_TH_STYLE = "white-space: nowrap; height: 12px;text-align: left;vertical-align: top;font-weight: bold;background-color: #F0F0F0;border: 1px solid #CCCCCC;padding: 5px;width: 50%;"
-HTML_TABLE_STYLE = "margin: auto;empty-cells: show;border-collapse: collapse;border: 1px solid #CCCCCC;width:80%;"
-"""
-Representation of a Polarion Test Case XML.
-"""
+HTML_TABLE_TD_STYLE = (
+    "height: 12px;"
+    "text-align: left;"
+    "vertical-align: top;"
+    "line-height: 18px;"
+    "border: 1px solid #CCCCCC;"
+    "padding: 5px;"
+)
+
+HTML_TABLE_TH_STYLE = (
+    "white-space: nowrap;"
+    "height: 12px;"
+    "text-align: left;vertical-align: top;"
+    "font-weight: bold;background-color: #F0F0F0;"
+    "border: 1px solid #CCCCCC;"
+    "padding: 5px;"
+    "width: 50%;"
+)
+
+HTML_TABLE_STYLE = (
+    "margin: auto;"
+    "empty-cells: show;"
+    "border-collapse: collapse;"
+    "border: 1px solid #CCCCCC;"
+    "width:80%;"
+)
 
 
 class PolarionTestCase(object):
@@ -224,20 +244,20 @@ class PolarionTestCase(object):
         on current state of this instance.
         :return: str representing the test case xml
         """
-        xmltree = etree.ElementTree(element=etree.Element("testcases"))
+        xmltree = ElementTree.ElementTree(element=ElementTree.Element("testcases"))
 
         # root element - testcases and attributes
         xmlroot = xmltree.getroot()
         xmlroot.attrib["project-id"] = self.project
 
         # properties
-        properties = etree.SubElement(xmlroot, "properties")
+        properties = ElementTree.SubElement(xmlroot, "properties")
         PolarionXmlUtils.new_property_sub_element(
             properties, "lookup-method", self.lookup_method
         )
 
         # testcase and attributes
-        tc = etree.SubElement(xmlroot, "testcase")
+        tc = ElementTree.SubElement(xmlroot, "testcase")
         tc.set("assignee-id", self.assignee)
         if self.approvals:
             tc.set(
@@ -260,11 +280,11 @@ class PolarionTestCase(object):
 
         # testcase child elements
         # testcase/title
-        tc_title = etree.SubElement(tc, "title")
+        tc_title = ElementTree.SubElement(tc, "title")
         tc_title.text = self.title
 
         # testcase/description
-        tc_description = etree.SubElement(tc, "description")
+        tc_description = ElementTree.SubElement(tc, "description")
         tc_description.text = PolarionTestCase.DESC_PREFIX_SUFFIX
         if self.description:
             tc_description.text += "<br>"
@@ -273,7 +293,7 @@ class PolarionTestCase(object):
             tc_description.text += PolarionTestCase.DESC_PREFIX_SUFFIX
 
         # testcase/custom-fields
-        tc_custom = etree.SubElement(tc, "custom-fields")
+        tc_custom = ElementTree.SubElement(tc, "custom-fields")
         PolarionXmlUtils.new_custom_field(tc_custom, "casecomponent", self.component)
         PolarionXmlUtils.new_custom_field(tc_custom, "subcomponent", self.sub_component)
         PolarionXmlUtils.new_custom_field(tc_custom, "testtype", self.type)
@@ -298,7 +318,7 @@ class PolarionTestCase(object):
 
         # testcase/linked-work-items
         if self.verifies:
-            tc_linked = etree.SubElement(tc, "linked-work-items")
+            tc_linked = ElementTree.SubElement(tc, "linked-work-items")
             for verify in [
                 verify for verify in self.verifies if isinstance(verify, dict)
             ]:
@@ -310,7 +330,7 @@ class PolarionTestCase(object):
 
         # testcase/test-steps
         if self.steps:
-            tc_steps = etree.SubElement(tc, "test-steps")
+            tc_steps = ElementTree.SubElement(tc, "test-steps")
 
             # If test case has parameters, add them
             if self.parameters:
@@ -321,7 +341,7 @@ class PolarionTestCase(object):
 
         # external links Jira, BZ
         if self.defects:
-            tc_hyperlinks = etree.SubElement(tc, "hyperlinks")
+            tc_hyperlinks = ElementTree.SubElement(tc, "hyperlinks")
             for defect in self.defects:
                 for key in defect:
                     PolarionXmlUtils.new_hyperlink_sub_element(
@@ -329,7 +349,7 @@ class PolarionTestCase(object):
                     )
                     # PolarionXmlUtils.new_hyperlink_sub_element(tc_hyperlinks, "testscript", defect[key])
 
-        xml_str = minidom.parseString(etree.tostring(xmlroot)).toprettyxml()
+        xml_str = minidom.parseString(ElementTree.tostring(xmlroot)).toprettyxml()
 
         with open("testcase.xml", "w") as out_file:
             out_file.write(xml_str)

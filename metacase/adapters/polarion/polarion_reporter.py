@@ -6,7 +6,7 @@ Provides mechanisms to submit TestCase XML files to Polarion.
 import json
 import logging
 import time
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ElementTree
 from html import escape
 from xml.dom import minidom
 
@@ -194,21 +194,21 @@ class PolarionReporter(object):
         on current state of this instance.
         :return: str representing the test case xml
         """
-        xmltree = etree.ElementTree(element=etree.Element("testcases"))
+        xmltree = ElementTree.ElementTree(element=ElementTree.Element("testcases"))
 
         # root element - testcases and attributes
         xmlroot = xmltree.getroot()
         xmlroot.attrib["project-id"] = polarion_testcase_list[0].project
 
         # properties
-        properties = etree.SubElement(xmlroot, "properties")
+        properties = ElementTree.SubElement(xmlroot, "properties")
         PolarionXmlUtils.new_property_sub_element(
             properties, "lookup-method", polarion_testcase_list[0].lookup_method
         )
 
         for ptc in polarion_testcase_list:
             # testcase and attributes
-            tc = etree.SubElement(xmlroot, "testcase")
+            tc = ElementTree.SubElement(xmlroot, "testcase")
             tc.set("assignee-id", ptc.assignee)
             if ptc.approvals:
                 tc.set(
@@ -231,11 +231,11 @@ class PolarionReporter(object):
 
             # testcase child elements
             # testcase/title
-            tc_title = etree.SubElement(tc, "title")
+            tc_title = ElementTree.SubElement(tc, "title")
             tc_title.text = ptc.title
 
             # testcase/description
-            tc_description = etree.SubElement(tc, "description")
+            tc_description = ElementTree.SubElement(tc, "description")
             tc_description.text = PolarionTestCase.DESC_PREFIX_SUFFIX
             if ptc.description:
                 tc_description.text += "<br>"
@@ -244,7 +244,7 @@ class PolarionReporter(object):
                 tc_description.text += PolarionTestCase.DESC_PREFIX_SUFFIX
 
             # testcase/custom-fields
-            tc_custom = etree.SubElement(tc, "custom-fields")
+            tc_custom = ElementTree.SubElement(tc, "custom-fields")
             PolarionXmlUtils.new_custom_field(tc_custom, "casecomponent", ptc.component)
             PolarionXmlUtils.new_custom_field(
                 tc_custom, "subcomponent", ptc.sub_component
@@ -275,7 +275,7 @@ class PolarionReporter(object):
 
             # testcase/linked-work-items
             if ptc.verifies:
-                tc_linked = etree.SubElement(tc, "linked-work-items")
+                tc_linked = ElementTree.SubElement(tc, "linked-work-items")
                 for verify in [
                     verify for verify in ptc.verifies if isinstance(verify, dict)
                 ]:
@@ -287,7 +287,7 @@ class PolarionReporter(object):
 
             # testcase/test-steps
             if ptc.steps:
-                tc_steps = etree.SubElement(tc, "test-steps")
+                tc_steps = ElementTree.SubElement(tc, "test-steps")
 
                 # If test case has parameters, add them
                 if ptc.parameters:
@@ -298,7 +298,7 @@ class PolarionReporter(object):
 
             # external links Jira, BZ
             if ptc.defects:
-                tc_hyperlinks = etree.SubElement(tc, "hyperlinks")
+                tc_hyperlinks = ElementTree.SubElement(tc, "hyperlinks")
                 for defect in ptc.defects:
                     for key in defect:
                         PolarionXmlUtils.new_hyperlink_sub_element(
@@ -306,7 +306,7 @@ class PolarionReporter(object):
                         )
                         # PolarionXmlUtils.new_hyperlink_sub_element(tc_hyperlinks, "testscript", defect[key])
 
-        xml_str = minidom.parseString(etree.tostring(xmlroot)).toprettyxml()
+        xml_str = minidom.parseString(ElementTree.tostring(xmlroot)).toprettyxml()
 
         output_file_name = "testcase.xml"
         LOGGER.info("Generated: %s", output_file_name)

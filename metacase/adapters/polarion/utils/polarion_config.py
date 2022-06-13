@@ -1,7 +1,8 @@
 """
-Represents FMF Polarion Adapter configuration.
+Represents Polarion Adapter configuration.
 """
 import configparser
+import logging
 
 
 class PolarionConfig(object):
@@ -20,7 +21,14 @@ class PolarionConfig(object):
     def __init__(self, config_file):
         self.config = configparser.ConfigParser()
         self.config.read(config_file)
-        assert PolarionConfig.KEY_SECTION in self.config.sections()
+        try:
+            self.config.get(PolarionConfig.KEY_SECTION, PolarionConfig.KEY_TC_URL)
+        except (configparser.NoSectionError, configparser.NoOptionError):
+            logging.exception(
+                "Missing configuration %s:%s in config file".format(
+                    PolarionConfig.KEY_SECTION, PolarionConfig.KEY_TC_URL
+                )
+            )
 
     def test_case_url(self) -> str:
         """
