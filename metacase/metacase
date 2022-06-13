@@ -10,9 +10,8 @@ been designed generically, to expect more adapters to come.
 import logging
 import sys
 
-from metacase.args.args_parser import ArgParser
-from metacase.adapters.polarion.connectors.jira.jira import JiraPopulator, JiraPopulator
 from metacase.adapter import Adapter
+from metacase.args.args_parser import ArgParser
 
 LOGGER = logging.getLogger(__name__)
 

@@ -2,8 +2,8 @@ import argparse
 import os
 import sys
 
-from metacase.adapters.polarion.utils.polarion_config import PolarionConfig
 from metacase.adapter import AdapterArgParser
+from metacase.adapters.polarion.utils.polarion_config import PolarionConfig
 
 """
 Argument parser for the FMF Polarion Adapter.

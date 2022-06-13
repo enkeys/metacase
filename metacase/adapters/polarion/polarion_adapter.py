@@ -1,11 +1,11 @@
 import logging
 
-from metacase.adapters.polarion.args.polarion_args_parser import PolarionArgParser
 from metacase import TestCase
+from metacase.adapter import Adapter, AdapterArgParser
+from metacase.adapters.polarion.args.polarion_args_parser import PolarionArgParser
 from metacase.adapters.polarion.connectors.jira.jira import JiraPopulator
 from metacase.adapters.polarion.polarion_reporter import PolarionReporter
 from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
-from metacase.adapter import Adapter, AdapterArgParser
 
 """
 FMF Adapter for the Polarion ALM tool.

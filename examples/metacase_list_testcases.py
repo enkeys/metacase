@@ -1,7 +1,8 @@
-from metacase import TestCase
-from metacase.adapter import Adapter, AdapterArgParser
 import os
 import pprint
+
+from metacase import TestCase
+from metacase.adapter import Adapter, AdapterArgParser
 
 """
 This is a simple example that demonstrates an FMF test case being parsed and displayed.

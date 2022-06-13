@@ -4,22 +4,20 @@
 Provides mechanisms to submit TestCase XML files to Polarion.
 """
 import json
-import time
-import requests
 import logging
+import time
+import xml.etree.ElementTree as etree
+from html import escape
+from xml.dom import minidom
 
+import requests
+import urllib3
 from requests import RequestException, Response
 from requests.auth import HTTPBasicAuth
-import urllib3
 
 from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
 from metacase.adapters.polarion.utils.polarion_config import PolarionConfig
-
-import xml.etree.ElementTree as etree
-from xml.dom import minidom
-from html import escape
 from metacase.adapters.polarion.utils.polarion_xml import PolarionXmlUtils
-
 
 LOGGER = logging.getLogger(__name__)
 urllib3.disable_warnings()

@@ -1,13 +1,13 @@
 import abc
+import argparse
+import logging
 import os
 import re
-import logging
-import argparse
-import fmf
 from typing import List
 
-from metacase.testcase import TestCase
+import fmf
 
+from metacase.testcase import TestCase
 
 """
 Provides the generic classes used to represent an Adapter.

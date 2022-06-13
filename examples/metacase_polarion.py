@@ -1,6 +1,7 @@
-from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
-from metacase.adapters.polarion.polarion_adapter import PolarionAdapter
 import os
+
+from metacase.adapters.polarion.polarion_adapter import PolarionAdapter
+from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
 
 """
 This example fetches all FMF test cases found at ../test directory containing

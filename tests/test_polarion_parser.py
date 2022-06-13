@@ -1,7 +1,9 @@
-import pytest
 import os
-from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
+
+import pytest
+
 from metacase.adapters.polarion.polarion_adapter import PolarionAdapter
+from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
 
 """
 Ensures that a generic FMF Test Case is being converted into a

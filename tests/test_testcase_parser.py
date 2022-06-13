@@ -1,9 +1,9 @@
 import os
+
 import pytest
 
 from metacase import TestCase
 from metacase.adapter import AdapterTest
-
 
 """
 Validates if FMF Test Cases are being parsed as expected.

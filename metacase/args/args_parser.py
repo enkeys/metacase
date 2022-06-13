@@ -3,7 +3,6 @@ import sys
 
 import fmf
 
-from metacase.adapter import Adapter
 from metacase.adapters import *
 
 """

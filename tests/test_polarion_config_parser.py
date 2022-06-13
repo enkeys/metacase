@@ -1,5 +1,7 @@
-import pytest
 import os
+
+import pytest
+
 from metacase.adapters.polarion.utils.polarion_config import PolarionConfig
 
 """

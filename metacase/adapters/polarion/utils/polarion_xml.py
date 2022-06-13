@@ -4,8 +4,8 @@ sending them to the Polarion Importer.
 """
 
 import xml.etree.ElementTree as etree
-from typing import List
 from html import escape
+from typing import List
 
 
 class PolarionXmlUtils(object):

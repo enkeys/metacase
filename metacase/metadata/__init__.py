@@ -1,4 +1,5 @@
 import os
+
 import fmf.cli
 
 os.chdir(os.path.dirname(__file__))

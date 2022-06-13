@@ -1,8 +1,9 @@
-from metacase import TestCase
 import re
 import xml.etree.ElementTree as etree
-from xml.dom import minidom
 from html import escape
+from xml.dom import minidom
+
+from metacase import TestCase
 from metacase.adapters.polarion.utils.polarion_xml import PolarionXmlUtils
 
 # Static styles to be used while rendering HTML tables
