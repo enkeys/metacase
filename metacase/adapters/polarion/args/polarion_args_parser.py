@@ -2,13 +2,13 @@ import argparse
 import os
 import sys
 
-from fmfexporter.adapters.polarion.utils.polarion_config import PolarionConfig
-from fmfexporter.fmf_adapter import FMFAdapterArgParser
+from metacase.adapters.polarion.utils.polarion_config import PolarionConfig
+from metacase.adapter import AdapterArgParser
 """
 Argument parser for the FMF Polarion Adapter.
 """
 
-class PolarionArgParser(FMFAdapterArgParser):
+class PolarionArgParser(AdapterArgParser):
     """
     Argument parser that is used when polarion adapter is selected.
     """

@@ -1,4 +1,4 @@
-# fmfexporter
+# metacase
 
 FMF (Flexible Metadata Format) test case exporter tool.
 
@@ -6,7 +6,7 @@ This tool can be used to convert and export Test Cases defined
 using an [FMF](https://fmf.readthedocs.io/en/latest/) tree.
 
 The test cases must be defined according to an internal schema (*WIP* - will be shared here)
-and the fmfexporter can parse them and invoke a selected adapter to convert / export the
+and the metacase can parse them and invoke a selected adapter to convert / export the
 select test cases into an external ALM related tool.
 
 Format for defining the test case is YAML (Simple example available -- *WIP* -- in the test directory). 
@@ -14,19 +14,19 @@ Format for defining the test case is YAML (Simple example available -- *WIP* -- 
 ## Pre-requisites
 
 * python 3.6+
-* recommended to install fmfexporter or its requirements in a virtualenv
+* recommended to install metacase or its requirements in a virtualenv
 
 ## Usage
 
 For basic usage information, use:
 
 ```
-fmfexporter --help
+metacase --help
 ```
 
 ## Adapters
 
-This tool provides a generic `fmfexporter.fmf_adapter.FMFAdapter` interface that can be implemented
+This tool provides a generic `metacase.fmf_adapter.FMFAdapter` interface that can be implemented
 for new external ALM related tools.
 
 ### Polarion ALM
@@ -37,12 +37,12 @@ schema) into Polarion test case importer API.
 For help, use:
 
 ```
-fmfexporter polarion --help
+metacase polarion --help
 ```
 
 ## Contributors
 
-https://github.com/rh-messaging-qe/fmfexporter/graphs/contributors
+https://github.com/rh-messaging-qe/metacase/graphs/contributors
 
 ## Acknowledgments
 

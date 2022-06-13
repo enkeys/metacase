@@ -1,8 +1,8 @@
 import os
 import pytest
 
-from fmfexporter import FMFTestCase
-from fmfexporter.fmf_adapter import FMFAdapterTest
+from metacase import TestCase
+from metacase.adapter import AdapterTest
 
 
 """
@@ -10,18 +10,18 @@ Validates if FMF Test Cases are being parsed as expected.
 """
 
 @pytest.fixture(scope="module")
-def testcase(request) -> FMFTestCase:
+def testcase(request) -> TestCase:
     """
     Generate a testcase fixture containing a static test case.
     :param request:
     :return:
     """
-    fmf_adapter = FMFAdapterTest(os.path.dirname(os.path.abspath(__file__)))
+    fmf_adapter = AdapterTest(os.path.dirname(os.path.abspath(__file__)))
     tc = fmf_adapter.get_testcase('test_path.some_test_class.foo_test.TestFoo', 'test_foo_sample_01')
     return tc
 
 
-def test_fmftestcase_parser_test_identification(testcase):
+def test_testcase_parser_test_identification(testcase):
     """
     Asserts the FMF test case identification elements are properly parsed from YAML
     :param testcase:
@@ -34,7 +34,7 @@ def test_fmftestcase_parser_test_identification(testcase):
     assert len(testcase.tags) == 1
 
 
-def test_fmftestcase_parser_test_authoring(testcase):
+def test_testcase_parser_test_authoring(testcase):
     """
     Asserts the FMF test case authoring elements are properly parsed from YAML
     :param testcase:
@@ -48,7 +48,7 @@ def test_fmftestcase_parser_test_authoring(testcase):
     assert len(testcase.approvals) == 2
 
 
-def test_fmftestcase_parser_test_component(testcase):
+def test_testcase_parser_test_component(testcase):
     """
     Asserts the FMF test case components and sub_components elements are properly parsed from YAML
     :param testcase:
@@ -61,7 +61,7 @@ def test_fmftestcase_parser_test_component(testcase):
     assert len(testcase.sub_components) == 1
 
 
-def test_fmftestcase_parser_test_priorities(testcase):
+def test_testcase_parser_test_priorities(testcase):
     """
     Asserts the FMF test case priority related elements are properly parsed from YAML
     :param testcase:
@@ -71,7 +71,7 @@ def test_fmftestcase_parser_test_priorities(testcase):
     assert testcase.estimate == "40h"
 
 
-def test_fmftestcase_parser_test_level_type(testcase):
+def test_testcase_parser_test_level_type(testcase):
     """
     Asserts the FMF test case level and type elements are properly parsed from YAML
     :param testcase:
@@ -81,7 +81,7 @@ def test_fmftestcase_parser_test_level_type(testcase):
     assert testcase.type == "functional"
 
 
-def test_fmftestcase_parser_test_relationships(testcase):
+def test_testcase_parser_test_relationships(testcase):
     """
     Asserts the FMF test case relationship elements are properly parsed from YAML
     :param testcase:
@@ -98,7 +98,7 @@ def test_fmftestcase_parser_test_relationships(testcase):
     assert len(testcase.requirements) == 2
 
 
-def test_fmftestcase_parser_test_steps(testcase: FMFTestCase):
+def test_testcase_parser_test_steps(testcase: TestCase):
     """
     Asserts the FMF test case step elements are properly parsed from YAML
     :param testcase:
@@ -114,7 +114,7 @@ def test_fmftestcase_parser_test_steps(testcase: FMFTestCase):
     assert len(testcase.test_steps) == 2
 
 
-def test_fmftestcase_parser_test_parameters(testcase):
+def test_testcase_parser_test_parameters(testcase):
     """
     Asserts the FMF test case parameters element is properly parsed from YAML
     :param testcase:
@@ -126,7 +126,7 @@ def test_fmftestcase_parser_test_parameters(testcase):
     assert len(exp_parameters) == len(testcase.parameters)
 
 
-def test_fmftestcase_parser_test_testsuite(testcase: FMFTestCase):
+def test_testcase_parser_test_testsuite(testcase: TestCase):
     """
     Asserts the FMF testsuite element has been properly parsed from YAML
     :param testcase:

@@ -1,7 +1,7 @@
 import pytest
 import os
-from fmfexporter.adapters.polarion.polarion_test_case import PolarionTestCase
-from fmfexporter.adapters.polarion.fmf_adapter_polarion import FMFAdapterPolarion
+from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
+from metacase.adapters.polarion.polarion_adapter import PolarionAdapter
 
 """
 Ensures that a generic FMF Test Case is being converted into a
@@ -17,13 +17,13 @@ def testcase(request):
     :param request:
     :return:
     """
-    fmf_adapter = FMFAdapterPolarion(os.path.dirname(os.path.abspath(__file__)))
+    fmf_adapter = PolarionAdapter(os.path.dirname(os.path.abspath(__file__)))
     tc = fmf_adapter.get_testcase('test_path.some_test_class.foo_test.TestFoo', 'test_foo_sample_01')
-    ptc = PolarionTestCase.from_fmf_testcase(tc)
+    ptc = PolarionTestCase.from_testcase(tc)
     return ptc
 
 
-def test_polarion_fmftestcase_parser_id(testcase):
+def test_polarion_testcase_parser_id(testcase):
     """
     Asserts that the Polarion Test Case identification is mapped correctly from an FMF Test Case
     :param testcase:
@@ -34,7 +34,7 @@ def test_polarion_fmftestcase_parser_id(testcase):
     assert testcase.description.startswith('This is the summary\nThis is the description')
 
 
-def test_polarion_fmftestcase_parser_authoring(testcase):
+def test_polarion_testcase_parser_authoring(testcase):
     """
     Asserts that the Polarion Test Case authoring is mapped correctly from an FMF Test Case
     :param testcase:
@@ -46,7 +46,7 @@ def test_polarion_fmftestcase_parser_authoring(testcase):
     assert len(testcase.approvals) == 2
 
 
-def test_polarion_fmftestcase_parser_relationship(testcase):
+def test_polarion_testcase_parser_relationship(testcase):
     """
     Asserts that the Polarion Test Case verifies elements are mapped correctly from an FMF Test Case
     TODO Probably need to be split into other fields for Polarion. Currently everything becomes "verifies".
@@ -62,7 +62,7 @@ def test_polarion_fmftestcase_parser_relationship(testcase):
     assert len(verify_list) == len(testcase.verifies)
 
 
-def test_polarion_fmftestcase_parser_components(testcase):
+def test_polarion_testcase_parser_components(testcase):
     """
     Asserts that the Polarion Test Case component is mapped correctly from an FMF Test Case
     :param testcase:
@@ -72,7 +72,7 @@ def test_polarion_fmftestcase_parser_components(testcase):
     assert testcase.sub_component == 'Core_Engine'
 
 
-def test_polarion_fmftestcase_parser_level_and_type(testcase):
+def test_polarion_testcase_parser_level_and_type(testcase):
     """
     Asserts that the Polarion Test Case level and types are mapped correctly from an FMF Test Case
     :param testcase:
@@ -82,7 +82,7 @@ def test_polarion_fmftestcase_parser_level_and_type(testcase):
     assert testcase.type == 'functional'
 
 
-def test_polarion_fmftestcase_parser_importance(testcase):
+def test_polarion_testcase_parser_importance(testcase):
     """
     Asserts that the Polarion Test Case importance is mapped correctly from an FMF Test Case
     :param testcase:
@@ -91,7 +91,7 @@ def test_polarion_fmftestcase_parser_importance(testcase):
     assert testcase.importance == 'critical'
 
 
-def test_polarion_fmftestcase_parser_steps(testcase):
+def test_polarion_testcase_parser_steps(testcase):
     """
     Asserts that the Polarion Test Case steps elements are mapped correctly from an FMF Test Case
     :param testcase:
@@ -108,7 +108,7 @@ def test_polarion_fmftestcase_parser_steps(testcase):
     assert len(testcase.steps) == 2
 
 
-def test_polarion_fmftestcase_parser_custom_parameters(testcase):
+def test_polarion_testcase_parser_custom_parameters(testcase):
     """
     Asserts that the Polarion Test Case custom parameters are mapped correctly from an FMF Test Case
     :param testcase:

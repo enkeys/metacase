@@ -6,7 +6,7 @@ import argparse
 import fmf
 from typing import List
 
-from fmfexporter.fmf_testcase import FMFTestCase
+from metacase.testcase import TestCase
 
 
 """
@@ -18,7 +18,7 @@ Test Cases metadata.
 LOGGER = logging.getLogger(__name__)
 
 
-class FMFAdapterArgParser(abc.ABC, object):
+class AdapterArgParser(abc.ABC, object):
     """
     Argument parser Interface that defines the behaviors that
     must be provided by concrete argument parsers for external adapters.
@@ -44,7 +44,7 @@ class FMFAdapterArgParser(abc.ABC, object):
         raise NotImplementedError()
 
 
-class FMFAdapter(abc.ABC, object):
+class Adapter(abc.ABC, object):
     """
     Abstract FMF Adapter class that defines the generic behaviors and
     the abstract behaviors that must be implemented by the external
@@ -67,7 +67,7 @@ class FMFAdapter(abc.ABC, object):
 
     @staticmethod
     @abc.abstractmethod
-    def get_args_parser() -> FMFAdapterArgParser:
+    def get_args_parser() -> AdapterArgParser:
         """
         Return an FMFAdapterArgParser that adds extra arguments
         for parsing options related with external system.
@@ -76,31 +76,31 @@ class FMFAdapter(abc.ABC, object):
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def convert_from(self, fmf_testcase: FMFTestCase):
+    def convert_from(self, testcase: TestCase):
         """
         Concrete adapters must be able to convert from FMFTestCase
         and return their specialized version of a test case.
-        :param fmf_testcase:
+        :param testcase:
         :return: Adapter object that represents a test case
         """
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def submit_testcase(self, fmf_testcase: FMFTestCase):
+    def submit_testcase(self, testcase: TestCase):
         """
         This method is used to submit a generic FMFTestCase element
         into the external ALM related tool.
-        :param fmf_testcase:
+        :param testcase:
         :return:
         """
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def submit_testcases(self, fmf_testcases: list):
+    def submit_testcases(self, testcases: list):
         """
         This method is used to submit a list of generic FMFTestCase element
         into the external ALM related tool.
-        :param fmf_testcases:
+        :param testcases:
         :return:
         """
         raise NotImplementedError()
@@ -114,7 +114,7 @@ class FMFAdapter(abc.ABC, object):
         :param fmf_tree_path:
         :return:
         """
-        adapter_class = FMFAdapter.get_adapter_class(adapter_id)
+        adapter_class = Adapter.get_adapter_class(adapter_id)
         return adapter_class(fmf_tree_path)
 
     @staticmethod
@@ -124,7 +124,7 @@ class FMFAdapter(abc.ABC, object):
         :param adapter_id:
         :return:
         """
-        for sc in FMFAdapter.__subclasses__():
+        for sc in Adapter.__subclasses__():
             if sc.adapter_id() == adapter_id:
                 return sc
         # Should not happen if invoked from arg parser
@@ -136,17 +136,17 @@ class FMFAdapter(abc.ABC, object):
         Return adapter id of each subclass of FMFAdapter
         :return:
         """
-        return [sc.adapter_id() for sc in FMFAdapter.__subclasses__() if sc.adapter_id() != 'test']
+        return [sc.adapter_id() for sc in Adapter.__subclasses__() if sc.adapter_id() != 'test']
 
-    def convert_from_list(self, fmf_testcase_list: List[FMFTestCase]):
+    def convert_from_list(self, testcase_list: List[TestCase]):
         """
         Convert list of FMFTestCase objects into a list of test cases
         based on Adapter's customized version of an FMFTestCase.
-        :param fmf_testcase_list:
+        :param testcase_list:
         :return: list
         """
         tc_list = []
-        for tc in fmf_testcase_list:
+        for tc in testcase_list:
             tc_list.append(self.convert_from(tc))
         return tc_list
 
@@ -167,7 +167,7 @@ class FMFAdapter(abc.ABC, object):
                                        re.sub('\\[.*', '', testname))
         return name_in_tree
 
-    def get_testcase(self, classname: str, testname: str) -> FMFTestCase:
+    def get_testcase(self, classname: str, testname: str) -> TestCase:
         """
         Returns an FMFTestCase object based on provided "classname.testname".
         :param classname:
@@ -177,7 +177,7 @@ class FMFAdapter(abc.ABC, object):
         name_in_tree = self._get_name_in_tree(classname, testname)
         node = self._tree.find(name_in_tree)
         if node:
-            return FMFTestCase.from_fmf_testcase_node(node)
+            return TestCase.from_testcase_node(node)
 
         return None
 
@@ -192,12 +192,12 @@ class FMFAdapter(abc.ABC, object):
 
         for node in self._tree.climb():
             if not name or name in node.name:
-                nodes.append(FMFTestCase.from_fmf_testcase_node(node))
+                nodes.append(TestCase.from_testcase_node(node))
 
         return nodes
 
 
-class FMFAdapterTest(FMFAdapter):
+class AdapterTest(Adapter):
     """
     Dummy implementation just for unit tests.
     """
@@ -207,14 +207,14 @@ class FMFAdapterTest(FMFAdapter):
         return "test"
 
     @staticmethod
-    def get_args_parser() -> FMFAdapterArgParser:
+    def get_args_parser() -> AdapterArgParser:
         pass
 
-    def convert_from(self, fmf_testcase: FMFTestCase):
+    def convert_from(self, testcase: TestCase):
         pass
 
-    def submit_testcase(self, fmf_testcase: FMFTestCase):
+    def submit_testcase(self, testcase: TestCase):
         pass
 
-    def submit_testcases(self, fmf_testcase: list):
+    def submit_testcases(self, testcase: list):
         pass

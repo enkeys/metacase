@@ -47,7 +47,7 @@ class FMFTestCaseRelationship(dict):
         return self.get('customer-case', False)
 
 
-class FMFTestCase(object):
+class TestCase(object):
     """
     FMFTestCase is used to represent a test case metadata,
     defined in YAML using an internal FMF test case schema.
@@ -100,7 +100,7 @@ class FMFTestCase(object):
         self.adapter: dict = {}
 
     @staticmethod
-    def from_fmf_testcase_node(fmf_node: Tree):
+    def from_testcase_node(fmf_node: Tree):
         """
         This method is used to create an instance of an FMFTestCase based on a given node in the FMF Tree.
         :param fmf_node:
@@ -119,7 +119,7 @@ class FMFTestCase(object):
                 return _default
             return node.data[data]
 
-        fmf_tc = FMFTestCase()
+        fmf_tc = TestCase()
 
         try:
             # TC Identification

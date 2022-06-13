@@ -1,6 +1,6 @@
 import pytest
 import os
-from fmfexporter.adapters.polarion.utils.polarion_config import PolarionConfig
+from metacase.adapters.polarion.utils.polarion_config import PolarionConfig
 
 """
 Test if configuration file needed by Polarion adapter is being properly parsed.
@@ -15,7 +15,7 @@ def polarion_config(request):
     :param request:
     :return:
     """
-    return PolarionConfig(os.path.dirname(os.path.abspath(__file__)) + '/fmfexporter.config.ini')
+    return PolarionConfig(os.path.dirname(os.path.abspath(__file__)) + '/metacase.config.ini')
 
 
 def test_polarion_config_parser(polarion_config):

@@ -12,13 +12,13 @@ from requests import RequestException, Response
 from requests.auth import HTTPBasicAuth
 import urllib3
 
-from fmfexporter.adapters.polarion.polarion_test_case import PolarionTestCase
-from fmfexporter.adapters.polarion.utils.polarion_config import PolarionConfig
+from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
+from metacase.adapters.polarion.utils.polarion_config import PolarionConfig
 
 import xml.etree.ElementTree as etree
 from xml.dom import minidom
 from html import escape
-from fmfexporter.adapters.polarion.utils.polarion_xml import PolarionXmlUtils
+from metacase.adapters.polarion.utils.polarion_xml import PolarionXmlUtils
 
 
 LOGGER = logging.getLogger(__name__)

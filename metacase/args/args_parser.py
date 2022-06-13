@@ -3,27 +3,27 @@ import sys
 
 import fmf
 
-from fmfexporter.fmf_adapter import FMFAdapter
-from fmfexporter.adapters import *
+from metacase.adapter import Adapter
+from metacase.adapters import *
 
 """
-Common arguments for the fmfexporter tool.
+Common arguments for the tool.
 """
 
 
-class FMFExporterArgParser(object):
+class ArgParser(object):
     """
-    Common argument parser for fmfexporter tool.
+    Common argument parser for metacase tool.
     The arguments defined here must be provided, no matter which
     external adapter is used.
     """
 
     def __init__(self, *args, **kwargs):
 
-        self._parser = argparse.ArgumentParser(prog='fmfexporter')
+        self._parser = argparse.ArgumentParser(prog='metacase')
 
         # Common arguments
-        adapters = FMFAdapter.get_available_adapters()
+        adapters = Adapter.get_available_adapters()
 
         self._parser.add_argument(
             "-p", "--path", required=True, help="FMF Tree path containing your "
@@ -42,7 +42,7 @@ class FMFExporterArgParser(object):
         sp = self._parser.add_subparsers(title='Adapter', help='Adapter help', dest='adapter')
         for adapter in adapters:
             parser = sp.add_parser(adapter, add_help=True)
-            FMFAdapter.get_adapter_class(adapter).get_args_parser().add_arguments(parser)
+            Adapter.get_adapter_class(adapter).get_args_parser().add_arguments(parser)
 
         self._parsed_args = None
         self._adapter = None
@@ -58,12 +58,12 @@ class FMFExporterArgParser(object):
         self._parsed_args = self._parser.parse_args(args, namespace)
 
         # Give a change for adapter's arg parser
-        adapter_parser = FMFAdapter.get_adapter_class(self.parsed_args.adapter).get_args_parser()
+        adapter_parser = Adapter.get_adapter_class(self.parsed_args.adapter).get_args_parser()
         adapter_parser.parse_arguments(self._parsed_args)
 
         # Validate if parsed arguments are ok
         try:
-            self._adapter = FMFAdapter.get_adapter(self._parsed_args.adapter, self._parsed_args.path)
+            self._adapter = Adapter.get_adapter(self._parsed_args.adapter, self._parsed_args.path)
         except fmf.utils.FileError:
             print("Invalid FMF Tree path: %s" % self._parsed_args.path)
             sys.exit(1)

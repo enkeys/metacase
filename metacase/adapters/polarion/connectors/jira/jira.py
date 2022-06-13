@@ -1,7 +1,6 @@
 import configparser
 import jira
 
-
 class JiraConfig(object):
     """
    PolarionConfig represents data that must be provided through
@@ -78,7 +77,7 @@ class JiraConfig(object):
         """
         return self.config[JiraConfig.KEY_SECTION][JiraConfig.KEY_VER_IR] or None
 
-class FMFJiraPopulator(object):
+class JiraPopulator(object):
     TEST_WI = 'test-work-item'
     QE_TEST_COV = 'qe-test-coverage'
     VERIFIED_IN_REL = 'verified-in-release'

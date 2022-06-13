@@ -1,9 +1,9 @@
-from fmfexporter import FMFTestCase
+from metacase import TestCase
 import re
 import xml.etree.ElementTree as etree
 from xml.dom import minidom
 from html import escape
-from fmfexporter.adapters.polarion.utils.polarion_xml import PolarionXmlUtils
+from metacase.adapters.polarion.utils.polarion_xml import PolarionXmlUtils
 
 # Static styles to be used while rendering HTML tables
 HTML_TABLE_TD_STYLE = 'height: 12px;text-align: left;vertical-align: top;line-height: 18px;border: 1px solid #CCCCCC;padding: 5px;'
@@ -35,41 +35,41 @@ class PolarionTestCase(object):
     DESC_PREFIX_SUFFIX = "-- DO NOT EDIT THROUGH THE POLARION UI --"
 
     @staticmethod
-    def from_fmf_testcase(fmf_testcase: FMFTestCase):
+    def from_testcase(testcase: TestCase):
         """
         Creates an instance of PolarionTestCase based on the
         provided FMFTestCase object.
-        :param fmf_testcase:
+        :param testcase:
         :return:
         """
 
         tc = PolarionTestCase()
 
         # Identification
-        tc.id = fmf_testcase.name.replace('/', '.')[1:]
+        tc.id = testcase.name.replace('/', '.')[1:]
         tc.title = tc.id
-        tc.description = "%s\n%s" % (fmf_testcase.summary, fmf_testcase.description)
+        tc.description = "%s\n%s" % (testcase.summary, testcase.description)
 
         # If authors defined, add them to the description
-        if fmf_testcase.authors:
+        if testcase.authors:
             tc.description += "\n\nAuthors:\n"
-            tc.description += "\n".join(fmf_testcase.authors)
+            tc.description += "\n".join(testcase.authors)
 
         # If approvals defined, add them to the description
-        if fmf_testcase.approvals:
+        if testcase.approvals:
             tc.description += "\n\nApprovals:\n"
-            tc.description += "\n".join(fmf_testcase.approvals)
+            tc.description += "\n".join(testcase.approvals)
 
         # Set the assignee in case author is defined correctly
-        if len(fmf_testcase.authors) > 0:
-            author = fmf_testcase.authors[0]
+        if len(testcase.authors) > 0:
+            author = testcase.authors[0]
             # Expects author to be according to metadata schema: "Name Surname <email@redhat.com>"
             if re.match(PolarionTestCase.RE_USER_ID, author):
                 tc.assignee = re.sub(PolarionTestCase.RE_USER_ID, r'\1', author)
 
         # Set verifies list
-        tc.verifies = fmf_testcase.requirements
-        tc.defects = fmf_testcase.defects
+        tc.verifies = testcase.requirements
+        tc.defects = testcase.defects
 
         # Status is set to "draft" by default
         # workflow is:
@@ -81,8 +81,8 @@ class PolarionTestCase(object):
         tc.status = 'draft'
 
         # Fields expected inside adapater.polarion
-        if fmf_testcase.adapter and 'polarion' in fmf_testcase.adapter:
-            polarion: dict = fmf_testcase.adapter.get('polarion')
+        if testcase.adapter and 'polarion' in testcase.adapter:
+            polarion: dict = testcase.adapter.get('polarion')
             tc.project = polarion.get('project')
             tc.positive = 'positive' if polarion.get('positive', False) else 'negative'
             tc.automated = 'automated' if polarion.get('automated', False) else 'notautomated'
@@ -94,51 +94,51 @@ class PolarionTestCase(object):
 
         # Component
         tc.component = ''
-        if fmf_testcase.components:
-            if isinstance(fmf_testcase.components, list):
-                tc.component = fmf_testcase.components[0]
+        if testcase.components:
+            if isinstance(testcase.components, list):
+                tc.component = testcase.components[0]
             else:
-                tc.component = fmf_testcase.components
+                tc.component = testcase.components
 
         # Sub Component
         tc.sub_component = ''
-        if fmf_testcase.sub_components:
-            if isinstance(fmf_testcase.sub_components, list):
-                tc.sub_component = fmf_testcase.sub_components[0]
+        if testcase.sub_components:
+            if isinstance(testcase.sub_components, list):
+                tc.sub_component = testcase.sub_components[0]
             else:
-                tc.sub_component = fmf_testcase.sub_components
+                tc.sub_component = testcase.sub_components
 
         # Level and types
-        tc.level = fmf_testcase.level
-        tc.type = fmf_testcase.type
+        tc.level = testcase.level
+        tc.type = testcase.type
 
         # Importance
-        tc.importance = fmf_testcase.importance
+        tc.importance = testcase.importance
 
         # Parameters
-        tc.parameters = fmf_testcase.parameters
+        tc.parameters = testcase.parameters
 
         # Setup
-        for fmf_setup_step in fmf_testcase.test_setup:
+        for fmf_setup_step in testcase.test_setup:
             tc.setup.append(PolarionTestCase.Step(fmf_setup_step['step'], fmf_setup_step['expected']))
 
         # Teardown
-        for fmf_teardown_step in fmf_testcase.test_teardown:
+        for fmf_teardown_step in testcase.test_teardown:
             tc.teardown.append(PolarionTestCase.Step(fmf_teardown_step['step'], fmf_teardown_step['expected']))
 
         # Steps
-        for fmf_step in fmf_testcase.test_steps:
+        for fmf_step in testcase.test_steps:
             tc.steps.append(PolarionTestCase.Step(fmf_step['step'], fmf_step['expected']))
 
         # Approvals
-        for approver in fmf_testcase.approvals:
+        for approver in testcase.approvals:
             # Expects approver to be according to metadata schema: "Name Surname <email@redhat.com>"
             if not re.match(PolarionTestCase.RE_USER_ID, approver):
                 continue
             tc.approvals.append(re.sub(PolarionTestCase.RE_USER_ID, r'\1', approver))
 
         # Tags
-        tc.tags = fmf_testcase.tags
+        tc.tags = testcase.tags
 
         return tc
 

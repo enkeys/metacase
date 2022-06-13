@@ -1,11 +1,11 @@
 import logging
 
-from fmfexporter.adapters.polarion.args.polarion_args_parser import PolarionArgParser
-from fmfexporter import FMFTestCase
-from fmfexporter.adapters.polarion.connectors.jira.fmf_jira import FMFJiraPopulator
-from fmfexporter.adapters.polarion.polarion_reporter import PolarionReporter
-from fmfexporter.adapters.polarion.polarion_test_case import PolarionTestCase
-from fmfexporter.fmf_adapter import FMFAdapter, FMFAdapterArgParser
+from metacase.adapters.polarion.args.polarion_args_parser import PolarionArgParser
+from metacase import TestCase
+from metacase.adapters.polarion.connectors.jira.jira import JiraPopulator
+from metacase.adapters.polarion.polarion_reporter import PolarionReporter
+from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
+from metacase.adapter import Adapter, AdapterArgParser
 """
 FMF Adapter for the Polarion ALM tool.
 """
@@ -16,13 +16,13 @@ ADAPTER_ID = "polarion"
 LOGGER = logging.getLogger(__name__)
 
 
-class FMFAdapterPolarion(FMFAdapter):
+class PolarionAdapter(Adapter):
     """
     FMF Adapter implementation for the Polarion ALM tool.
     """
 
     def __init__(self, fmf_tree_path: str = '.'):
-        super(FMFAdapterPolarion, self).__init__(fmf_tree_path)
+        super(PolarionAdapter, self).__init__(fmf_tree_path)
         # If the config file has been parsed, create a reporter...
         self._reporter = None
         if PolarionArgParser.CONFIG_FILE:
@@ -33,14 +33,14 @@ class FMFAdapterPolarion(FMFAdapter):
         return ADAPTER_ID
 
     @staticmethod
-    def get_args_parser() -> FMFAdapterArgParser:
+    def get_args_parser() -> AdapterArgParser:
         return PolarionArgParser()
 
-    def convert_from(self, fmf_testcase: FMFTestCase):
-        return PolarionTestCase.from_fmf_testcase(fmf_testcase)
+    def convert_from(self, testcase: TestCase):
+        return PolarionTestCase.from_testcase(testcase)
 
-    def submit_testcase(self, fmf_testcase: FMFTestCase):
-        ptc = self.convert_from(fmf_testcase)
+    def submit_testcase(self, testcase: TestCase):
+        ptc = self.convert_from(testcase)
 
         #
         # If config file has been parsed (and there is a reporter available)
@@ -54,11 +54,11 @@ class FMFAdapterPolarion(FMFAdapter):
         else:
             print("Dumping test case: %s\n%s\n" % (ptc.id, ptc.to_xml()))
 
-    def submit_testcases(self, fmf_testcases: list):
+    def submit_testcases(self, testcases: list):
         submitted_tc = []
         polarion_test_cases = []
-        for fmf_testcase in fmf_testcases:
-            polarion_test_cases.append(self.convert_from(fmf_testcase))
+        for testcase in testcases:
+            polarion_test_cases.append(self.convert_from(testcase))
         #
         # If config file has been parsed (and there is a reporter available)
         # and --submit has been given, submit. Otherwise simply prints the tc.
@@ -85,7 +85,7 @@ class FMFAdapterPolarion(FMFAdapter):
     def populate_jira(self, submitted_testcases: list):
         # Linking Test Case Work items in jira
         if PolarionArgParser.JIRA_CONFIG is not None:
-            jira_pop = FMFJiraPopulator(PolarionArgParser.JIRA_CONFIG)
+            jira_pop = JiraPopulator(PolarionArgParser.JIRA_CONFIG)
             jira_pop.populate_testcases(submitted_testcases)
         else:
             LOGGER.warning("Jira configuration not provided")
