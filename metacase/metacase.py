@@ -15,9 +15,8 @@ from metacase.args.args_parser import ArgParser
 
 LOGGER = logging.getLogger(__name__)
 
-# Main flow
-if __name__ == '__main__':
 
+def main():
     if "--show-scheme" in sys.argv:
         import metacase.schema
         metacase.schema.show_scheme()
@@ -56,3 +55,6 @@ if __name__ == '__main__':
     # Submitting filtered test cases
     adapter.submit_testcases(tc_list)
 
+
+if __name__ == '__main__':
+    main()
