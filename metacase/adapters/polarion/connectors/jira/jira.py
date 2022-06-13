@@ -1,5 +1,6 @@
 import configparser
 import jira
+import logging
 
 
 class JiraConfig(object):
@@ -20,7 +21,10 @@ class JiraConfig(object):
     def __init__(self, config_file):
         self.config = configparser.ConfigParser()
         self.config.read(config_file)
-        assert JiraConfig.KEY_SECTION in self.config.sections()
+        try:
+            self.config.get(JiraConfig.KEY_SECTION)
+        except ValueError:
+            logging.exception('No KEY_SECTION jira in config file')
 
     @property
     def project(self) -> str:
