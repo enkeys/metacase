@@ -1,20 +1,32 @@
-# metacase
+# MetaCase
 
-FMF (Flexible Metadata Format) test case exporter tool.
+Universal test case metadata exporter tool.
 
 This tool can be used to convert and export Test Cases defined
 using an [FMF](https://fmf.readthedocs.io/en/latest/) tree.
 
-The test cases must be defined according to an internal schema (*WIP* - will be shared here)
-and the metacase can parse them and invoke a selected adapter to convert / export the
+The test cases must be defined according to an [internal schema](./metacase/schema)
+and the MetaCase can parse them and invoke a selected adapter to convert / export the
 select test cases into an external ALM related tool.
 
-Format for defining the test case is YAML (Simple example available -- *WIP* -- in the test directory). 
+Format for defining the test case is YAML. [Example here](./examples)
 
 ## Pre-requisites
 
-* python 3.6+
-* recommended to install metacase or its requirements in a virtualenv
+* Python 3.9+
+
+[//]: # (TODO: Readme installation)
+## Installation
+
+```
+pip install metacase
+```
+
+or
+
+```
+pip install -e git+https://github.com/enkeys/metacase.git
+```
 
 ## Usage
 
@@ -26,7 +38,7 @@ metacase --help
 
 ## Adapters
 
-This tool provides a generic `metacase.fmf_adapter.FMFAdapter` interface that can be implemented
+This tool provides a generic `metacase.adapter.Adapter` interface that can be implemented
 for new external ALM related tools.
 
 ### Polarion ALM
@@ -40,9 +52,13 @@ For help, use:
 metacase polarion --help
 ```
 
+## Connectors
+
+Connector are helpers that can obtain information from external sources such as issue tracker, source repository, etc.
+
 ## Contributors
 
-https://github.com/rh-messaging-qe/metacase/graphs/contributors
+https://github.com/enkeys/metacase/graphs/contributors
 
 ## Acknowledgments
 
