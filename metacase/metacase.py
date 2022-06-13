@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-FMFExporter command line tool that helps exporting test cases defined
+MetaCase command line tool that helps export test cases defined
 based on a generic metadata format into an external ALM tool.
 Adapters can be implemented and customized as needed.
 

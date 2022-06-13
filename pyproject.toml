@@ -2,7 +2,7 @@
 name = "metacase"
 version = "0.1.0"
 description = "MetaCase is test case exporter tool based on FMF (Flexible Metadata Format) ."
-authors = ["Fernando Giorgetti <fgiorget@redhat.com>, Dominik Lenoch <dlenoch@redhat.com>"]
+authors = ["Fernando Giorgetti <fgiorget@redhat.com>", "Dominik Lenoch <dlenoch@redhat.com>"]
 maintainers = ["Dominik Lenoch <dlenoch@redhat.com>"]
 license = "Apache-2.0"
 readme = "README.md"
