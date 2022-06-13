@@ -13,7 +13,7 @@ the test case will be printed as an XML to the stdout.
 polarion = PolarionAdapter(os.path.dirname(os.path.abspath(__file__)) + "/../test")
 
 # Listing all test cases found and containing "test_path" in their names
-test_cases = [tc for tc in polarion.get_testcases_matching('test_path')]
+test_cases = [tc for tc in polarion.get_testcases_matching("test_path")]
 
 # List all test case names and their content
 polarion.submit_testcases(test_cases)

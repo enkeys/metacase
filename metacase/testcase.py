@@ -11,40 +11,42 @@ class FMFTestSuite(dict):
     """
     Dictionary with properties to access currently supported (and documented) keys.
     """
+
     def __init__(self, *args, **kwargs):
         super(FMFTestSuite, self).__init__(*args, **kwargs)
 
     @property
     def parameters(self) -> list:
-        return self.get('parameters', [])
+        return self.get("parameters", [])
 
     @property
     def properties(self) -> dict:
-        return self.get('properties', {})
+        return self.get("properties", {})
 
     @property
     def compatible_topologies(self) -> list:
-        return self.get('compatible_topologies', self.get('compatible-topologies', []))
+        return self.get("compatible_topologies", self.get("compatible-topologies", []))
 
 
 class FMFTestCaseRelationship(dict):
     """
     Dictionary with properties exposing currently supported (and documented) keys.
     """
+
     def __init__(self, *args, **kwargs):
         super(FMFTestCaseRelationship, self).__init__(*args, **kwargs)
 
     @property
     def jira(self) -> str:
-        return self.get('jira', '')
+        return self.get("jira", "")
 
     @property
     def bugzilla(self) -> str:
-        return self.get('bugzilla', '')
+        return self.get("bugzilla", "")
 
     @property
     def customer_case(self) -> bool:
-        return self.get('customer-case', False)
+        return self.get("customer-case", False)
 
 
 class TestCase(object):
@@ -52,6 +54,7 @@ class TestCase(object):
     FMFTestCase is used to represent a test case metadata,
     defined in YAML using an internal FMF test case schema.
     """
+
     def __init__(self):
 
         # TC Identification
@@ -124,49 +127,55 @@ class TestCase(object):
         try:
             # TC Identification
             fmf_tc.name = fmf_node.name
-            fmf_tc.summary = get_fmf_data(fmf_node, 'summary', '')
-            fmf_tc.description = get_fmf_data(fmf_node, 'description', '')
-            fmf_tc.tags = get_fmf_data(fmf_node, 'tags', [])
+            fmf_tc.summary = get_fmf_data(fmf_node, "summary", "")
+            fmf_tc.description = get_fmf_data(fmf_node, "description", "")
+            fmf_tc.tags = get_fmf_data(fmf_node, "tags", [])
 
             # Authoring and approvals
-            fmf_tc.authors = get_fmf_data(fmf_node, 'authors', [])
-            fmf_tc.approvals = get_fmf_data(fmf_node, 'approvals', [])
+            fmf_tc.authors = get_fmf_data(fmf_node, "authors", [])
+            fmf_tc.approvals = get_fmf_data(fmf_node, "approvals", [])
 
             # Classification
-            fmf_tc.type = get_fmf_data(fmf_node, 'type', '')
-            fmf_tc.subtypes = get_fmf_data(fmf_node, 'subtypes', [])
-            fmf_tc.level = get_fmf_data(fmf_node, 'level', '')
+            fmf_tc.type = get_fmf_data(fmf_node, "type", "")
+            fmf_tc.subtypes = get_fmf_data(fmf_node, "subtypes", [])
+            fmf_tc.level = get_fmf_data(fmf_node, "level", "")
 
             # Components
-            fmf_tc.components = get_fmf_data(fmf_node, 'components', '')
-            fmf_tc.sub_components = get_fmf_data(fmf_node, 'subcomponents', '')
+            fmf_tc.components = get_fmf_data(fmf_node, "components", "")
+            fmf_tc.sub_components = get_fmf_data(fmf_node, "subcomponents", "")
 
             # Importance / priority
-            fmf_tc.importance = get_fmf_data(fmf_node, 'importance', '')
-            fmf_tc.estimate = get_fmf_data(fmf_node, 'estimate', '')
+            fmf_tc.importance = get_fmf_data(fmf_node, "importance", "")
+            fmf_tc.estimate = get_fmf_data(fmf_node, "estimate", "")
 
             # Relationships
-            fmf_tc.defects = [FMFTestCaseRelationship(defect) for defect in get_fmf_data(fmf_node, 'defects', [])]
-            fmf_tc.requirements = [FMFTestCaseRelationship(req) for req in get_fmf_data(fmf_node, 'requirements', [])]
+            fmf_tc.defects = [
+                FMFTestCaseRelationship(defect)
+                for defect in get_fmf_data(fmf_node, "defects", [])
+            ]
+            fmf_tc.requirements = [
+                FMFTestCaseRelationship(req)
+                for req in get_fmf_data(fmf_node, "requirements", [])
+            ]
 
             # Setup
-            fmf_tc.test_setup = get_fmf_data(fmf_node, 'test-setup', [])
+            fmf_tc.test_setup = get_fmf_data(fmf_node, "test-setup", [])
 
             # Teardown
-            fmf_tc.test_teardown = get_fmf_data(fmf_node, 'test-teardown', [])
+            fmf_tc.test_teardown = get_fmf_data(fmf_node, "test-teardown", [])
 
             # Steps
-            fmf_tc.test_steps = get_fmf_data(fmf_node, 'test-steps', [])
+            fmf_tc.test_steps = get_fmf_data(fmf_node, "test-steps", [])
 
             # Test Case parameters
-            fmf_tc.parameters = get_fmf_data(fmf_node, 'parameters', [])
+            fmf_tc.parameters = get_fmf_data(fmf_node, "parameters", [])
 
             # Test Suite parameters
-            ts = get_fmf_data(fmf_node, 'testsuite', {})
+            ts = get_fmf_data(fmf_node, "testsuite", {})
             fmf_tc.testsuite = FMFTestSuite(**ts)
 
             # Adapter specific info
-            fmf_tc.adapter = get_fmf_data(fmf_node, 'adapter', {})
+            fmf_tc.adapter = get_fmf_data(fmf_node, "adapter", {})
 
             return fmf_tc
         except Exception as e:

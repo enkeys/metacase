@@ -20,26 +20,38 @@ class ArgParser(object):
 
     def __init__(self, *args, **kwargs):
 
-        self._parser = argparse.ArgumentParser(prog='metacase')
+        self._parser = argparse.ArgumentParser(prog="metacase")
 
         # Common arguments
         adapters = Adapter.get_available_adapters()
 
         self._parser.add_argument(
-            "-p", "--path", required=True, help="FMF Tree path containing your "
-            "test cases")
+            "-p",
+            "--path",
+            required=True,
+            help="FMF Tree path containing your " "test cases",
+        )
         self._parser.add_argument(
-            "--tc", action="append", help="FMF Test Case filter (by name)")
+            "--tc", action="append", help="FMF Test Case filter (by name)"
+        )
         self._parser.add_argument(
-            "--log-level", choices=['WARNING', 'INFO', 'DEBUG'], default='INFO',
+            "--log-level",
+            choices=["WARNING", "INFO", "DEBUG"],
+            default="INFO",
             # action='store_true', dest='log_level',
-            help="Specify logging level to use")
+            help="Specify logging level to use",
+        )
         self._parser.add_argument(
-            "--show-scheme", action='store_true', dest='show_scheme',
-            help="Show metadata scheme")
+            "--show-scheme",
+            action="store_true",
+            dest="show_scheme",
+            help="Show metadata scheme",
+        )
 
         # Sub-commands from available adapters
-        sp = self._parser.add_subparsers(title='Adapter', help='Adapter help', dest='adapter')
+        sp = self._parser.add_subparsers(
+            title="Adapter", help="Adapter help", dest="adapter"
+        )
         for adapter in adapters:
             parser = sp.add_parser(adapter, add_help=True)
             Adapter.get_adapter_class(adapter).get_args_parser().add_arguments(parser)
@@ -58,12 +70,16 @@ class ArgParser(object):
         self._parsed_args = self._parser.parse_args(args, namespace)
 
         # Give a change for adapter's arg parser
-        adapter_parser = Adapter.get_adapter_class(self.parsed_args.adapter).get_args_parser()
+        adapter_parser = Adapter.get_adapter_class(
+            self.parsed_args.adapter
+        ).get_args_parser()
         adapter_parser.parse_arguments(self._parsed_args)
 
         # Validate if parsed arguments are ok
         try:
-            self._adapter = Adapter.get_adapter(self._parsed_args.adapter, self._parsed_args.path)
+            self._adapter = Adapter.get_adapter(
+                self._parsed_args.adapter, self._parsed_args.path
+            )
         except fmf.utils.FileError:
             print("Invalid FMF Tree path: %s" % self._parsed_args.path)
             sys.exit(1)

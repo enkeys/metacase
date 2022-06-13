@@ -23,6 +23,7 @@ class AdapterArgParser(abc.ABC, object):
     Argument parser Interface that defines the behaviors that
     must be provided by concrete argument parsers for external adapters.
     """
+
     @abc.abstractmethod
     def add_arguments(self, parser: argparse.ArgumentParser):
         """
@@ -51,7 +52,7 @@ class Adapter(abc.ABC, object):
     FMF Adapter implementations.
     """
 
-    def __init__(self, fmf_tree_path: str = '.'):
+    def __init__(self, fmf_tree_path: str = "."):
         self._cur_path = os.path.abspath(fmf_tree_path)
         self._tree = fmf.Tree(self._cur_path)
 
@@ -136,7 +137,11 @@ class Adapter(abc.ABC, object):
         Return adapter id of each subclass of FMFAdapter
         :return:
         """
-        return [sc.adapter_id() for sc in Adapter.__subclasses__() if sc.adapter_id() != 'test']
+        return [
+            sc.adapter_id()
+            for sc in Adapter.__subclasses__()
+            if sc.adapter_id() != "test"
+        ]
 
     def convert_from_list(self, testcase_list: List[TestCase]):
         """
@@ -163,8 +168,9 @@ class Adapter(abc.ABC, object):
         # Name in tree will be composed by classname"/"testname
         # and eventual parameters (usually defined as '[param1-param2]' must
         # be removed.
-        name_in_tree = "/{}/{}".format(classname.replace('.', '/'),
-                                       re.sub('\\[.*', '', testname))
+        name_in_tree = "/{}/{}".format(
+            classname.replace(".", "/"), re.sub("\\[.*", "", testname)
+        )
         return name_in_tree
 
     def get_testcase(self, classname: str, testname: str) -> TestCase:

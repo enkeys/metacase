@@ -6,6 +6,7 @@ from metacase.adapters.polarion.connectors.jira.jira import JiraPopulator
 from metacase.adapters.polarion.polarion_reporter import PolarionReporter
 from metacase.adapters.polarion.polarion_test_case import PolarionTestCase
 from metacase.adapter import Adapter, AdapterArgParser
+
 """
 FMF Adapter for the Polarion ALM tool.
 """
@@ -21,12 +22,14 @@ class PolarionAdapter(Adapter):
     FMF Adapter implementation for the Polarion ALM tool.
     """
 
-    def __init__(self, fmf_tree_path: str = '.'):
+    def __init__(self, fmf_tree_path: str = "."):
         super(PolarionAdapter, self).__init__(fmf_tree_path)
         # If the config file has been parsed, create a reporter...
         self._reporter = None
         if PolarionArgParser.CONFIG_FILE:
-            self._reporter: PolarionReporter = PolarionReporter(PolarionArgParser.CONFIG_FILE)
+            self._reporter: PolarionReporter = PolarionReporter(
+                PolarionArgParser.CONFIG_FILE
+            )
 
     @staticmethod
     def adapter_id() -> str:
@@ -68,17 +71,26 @@ class PolarionAdapter(Adapter):
             if PolarionArgParser.ONE_BY_ONE:
                 for ptc in polarion_test_cases:
                     LOGGER.info("Submitting test case: %s" % ptc.id)
-                    submitted_tc.append(self._reporter.submit_testcase(ptc, PolarionArgParser.POPUL_TC))
+                    submitted_tc.append(
+                        self._reporter.submit_testcase(ptc, PolarionArgParser.POPUL_TC)
+                    )
             else:
                 for ptc in polarion_test_cases:
                     LOGGER.info("Submitting test case: %s" % ptc.id)
-                submitted_tc.extend(self._reporter.submit_testcases(polarion_test_cases, PolarionArgParser.POPUL_TC))
+                submitted_tc.extend(
+                    self._reporter.submit_testcases(
+                        polarion_test_cases, PolarionArgParser.POPUL_TC
+                    )
+                )
         else:
             if PolarionArgParser.ONE_BY_ONE:
                 for ptc in polarion_test_cases:
                     print("Dumping test case: %s\n%s\n" % (ptc.id, ptc.to_xml()))
             else:
-                print("Dumping test cases: \n%s\n" % (PolarionReporter.to_xml(polarion_test_cases)))
+                print(
+                    "Dumping test cases: \n%s\n"
+                    % (PolarionReporter.to_xml(polarion_test_cases))
+                )
 
         self.populate_jira(submitted_tc)
 

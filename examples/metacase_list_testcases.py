@@ -35,7 +35,7 @@ class AdapterTest(Adapter):
 adapter = AdapterTest(os.path.dirname(os.path.abspath(__file__)) + "/../test")
 
 # Listing all test cases found and containing "test_path" in their names
-test_cases = [tc for tc in adapter.get_testcases_matching('test_path')]
+test_cases = [tc for tc in adapter.get_testcases_matching("test_path")]
 
 # List all test case names and their content
 for tc in test_cases:

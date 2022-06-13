@@ -16,8 +16,11 @@ class PolarionXmlUtils(object):
     """
 
     @staticmethod
-    def new_linked_work_item(linked_work_item_parent: etree.Element, workitem_id: str,
-                            role_id: str = 'verifies') -> None:
+    def new_linked_work_item(
+        linked_work_item_parent: etree.Element,
+        workitem_id: str,
+        role_id: str = "verifies",
+    ) -> None:
         """
         Creates sub-element named 'linked-work-item' within the given 'linked-work-items' parent.
         It will also set the 'workitem-id' property using the id value provided.
@@ -27,12 +30,14 @@ class PolarionXmlUtils(object):
         """
         if workitem_id is None:
             return
-        sub_elem = etree.SubElement(linked_work_item_parent, 'linked-work-item')
-        sub_elem.set('workitem-id', workitem_id)
-        sub_elem.set('role-id', role_id)
+        sub_elem = etree.SubElement(linked_work_item_parent, "linked-work-item")
+        sub_elem.set("workitem-id", workitem_id)
+        sub_elem.set("role-id", role_id)
 
     @staticmethod
-    def new_custom_field(custom_fields_parent: etree.Element, id_field: str, content: str) -> None:
+    def new_custom_field(
+        custom_fields_parent: etree.Element, id_field: str, content: str
+    ) -> None:
         """
         Creates sub-element named 'custom-field' within the given 'custom-fields' parent.
         It will also set the 'id' and 'content' attributes on the 'custom-field' element.
@@ -44,9 +49,9 @@ class PolarionXmlUtils(object):
         """
         if content is None:
             return
-        sub_elem = etree.SubElement(custom_fields_parent, 'custom-field')
-        sub_elem.set('id', id_field)
-        sub_elem.set('content', content)
+        sub_elem = etree.SubElement(custom_fields_parent, "custom-field")
+        sub_elem.set("id", id_field)
+        sub_elem.set("content", content)
 
     @staticmethod
     def new_test_step(test_steps_parent: etree.Element, step: str, result: str) -> None:
@@ -65,29 +70,31 @@ class PolarionXmlUtils(object):
             return
 
         # The test-step that holds step and expectedResult
-        test_step = etree.SubElement(test_steps_parent, 'test-step')
+        test_step = etree.SubElement(test_steps_parent, "test-step")
 
         # Step element
-        step_elem = etree.SubElement(test_step, 'test-step-column')
-        step_elem.set('id', 'step')
-        step_elem.text = escape(step).replace('\n', '<br>')
+        step_elem = etree.SubElement(test_step, "test-step-column")
+        step_elem.set("id", "step")
+        step_elem.text = escape(step).replace("\n", "<br>")
 
         # Expected result element
-        result_elem = etree.SubElement(test_step, 'test-step-column')
-        result_elem.set('id', 'expectedResult')
-        result_elem.text = escape(result).replace('\n', '<br>')
+        result_elem = etree.SubElement(test_step, "test-step-column")
+        result_elem.set("id", "expectedResult")
+        result_elem.text = escape(result).replace("\n", "<br>")
 
     @staticmethod
-    def new_test_step_params(test_steps_parent: etree.Element, params: List[str], scope: str="local") -> None:
+    def new_test_step_params(
+        test_steps_parent: etree.Element, params: List[str], scope: str = "local"
+    ) -> None:
         if params is None:
             return
 
         # The test-step that holds all test parameters
-        test_step = etree.SubElement(test_steps_parent, 'test-step')
+        test_step = etree.SubElement(test_steps_parent, "test-step")
 
         # Step element
-        step_elem = etree.SubElement(test_step, 'test-step-column', id='step')
-        step_elem.text = 'Parameters: '
+        step_elem = etree.SubElement(test_step, "test-step-column", id="step")
+        step_elem.text = "Parameters: "
         for (idx, param) in enumerate(params):
             param_elem = etree.Element("parameter", name=param, scope=scope)
             if idx > 0:
@@ -108,12 +115,14 @@ class PolarionXmlUtils(object):
         """
         if value is None:
             return
-        sub_elem = etree.SubElement(parent, 'property')
-        sub_elem.set('name', name)
-        sub_elem.set('value', value)
+        sub_elem = etree.SubElement(parent, "property")
+        sub_elem.set("name", name)
+        sub_elem.set("value", value)
 
     @staticmethod
-    def new_hyperlink_sub_element(parent: etree.Element, role_id: str, uri_link: str) -> None:
+    def new_hyperlink_sub_element(
+        parent: etree.Element, role_id: str, uri_link: str
+    ) -> None:
         """
         Creates sub-element named 'hyperlink' within the given parent.
         It will also set attributes 'role-id' and 'uri' hyperlink as elements.
@@ -124,6 +133,6 @@ class PolarionXmlUtils(object):
         """
         if uri_link is None:
             return
-        sub_elem = etree.SubElement(parent, 'hyperlink')
-        sub_elem.set('role-id', role_id)
-        sub_elem.set('uri', uri_link)
+        sub_elem = etree.SubElement(parent, "hyperlink")
+        sub_elem.set("role-id", role_id)
+        sub_elem.set("uri", uri_link)

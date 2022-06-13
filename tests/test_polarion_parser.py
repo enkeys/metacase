@@ -18,7 +18,9 @@ def testcase(request):
     :return:
     """
     fmf_adapter = PolarionAdapter(os.path.dirname(os.path.abspath(__file__)))
-    tc = fmf_adapter.get_testcase('test_path.some_test_class.foo_test.TestFoo', 'test_foo_sample_01')
+    tc = fmf_adapter.get_testcase(
+        "test_path.some_test_class.foo_test.TestFoo", "test_foo_sample_01"
+    )
     ptc = PolarionTestCase.from_testcase(tc)
     return ptc
 
@@ -29,9 +31,13 @@ def test_polarion_testcase_parser_id(testcase):
     :param testcase:
     :return:
     """
-    assert testcase.id == 'test_path.some_test_class.foo_test.TestFoo.test_foo_sample_01'
+    assert (
+        testcase.id == "test_path.some_test_class.foo_test.TestFoo.test_foo_sample_01"
+    )
     assert testcase.title == testcase.id
-    assert testcase.description.startswith('This is the summary\nThis is the description')
+    assert testcase.description.startswith(
+        "This is the summary\nThis is the description"
+    )
 
 
 def test_polarion_testcase_parser_authoring(testcase):
@@ -40,9 +46,9 @@ def test_polarion_testcase_parser_authoring(testcase):
     :param testcase:
     :return:
     """
-    assert testcase.assignee == 'fgiorget'
-    assert 'fgiorget' in testcase.approvals
-    assert 'dlenoch' in testcase.approvals
+    assert testcase.assignee == "fgiorget"
+    assert "fgiorget" in testcase.approvals
+    assert "dlenoch" in testcase.approvals
     assert len(testcase.approvals) == 2
 
 
@@ -53,8 +59,14 @@ def test_polarion_testcase_parser_relationship(testcase):
     :param testcase:
     :return:
     """
-    defect_list = [{'polarion': 'ENTMQIC-1111', 'customer-case': True}, {'jira': 'ENTMQIC-2222'}]
-    verify_list = [{'polarion': 'ENTMQIC-3333', 'customer-case': True}, {'jira': 'ENTMQIC-4444'}]
+    defect_list = [
+        {"polarion": "ENTMQIC-1111", "customer-case": True},
+        {"jira": "ENTMQIC-2222"},
+    ]
+    verify_list = [
+        {"polarion": "ENTMQIC-3333", "customer-case": True},
+        {"jira": "ENTMQIC-4444"},
+    ]
 
     assert all(item in testcase.defects for item in defect_list)
     assert len(defect_list) == len(testcase.defects)
@@ -68,8 +80,8 @@ def test_polarion_testcase_parser_components(testcase):
     :param testcase:
     :return:
     """
-    assert testcase.component == 'router'
-    assert testcase.sub_component == 'Core_Engine'
+    assert testcase.component == "router"
+    assert testcase.sub_component == "Core_Engine"
 
 
 def test_polarion_testcase_parser_level_and_type(testcase):
@@ -78,8 +90,8 @@ def test_polarion_testcase_parser_level_and_type(testcase):
     :param testcase:
     :return:
     """
-    assert testcase.level == 'component'
-    assert testcase.type == 'functional'
+    assert testcase.level == "component"
+    assert testcase.type == "functional"
 
 
 def test_polarion_testcase_parser_importance(testcase):
@@ -88,7 +100,7 @@ def test_polarion_testcase_parser_importance(testcase):
     :param testcase:
     :return:
     """
-    assert testcase.importance == 'critical'
+    assert testcase.importance == "critical"
 
 
 def test_polarion_testcase_parser_steps(testcase):
@@ -98,8 +110,10 @@ def test_polarion_testcase_parser_steps(testcase):
     :return:
     """
 
-    steps = [PolarionTestCase.Step('Step 1', 'Expected 1'),
-             PolarionTestCase.Step('Step 2', 'Expected 2')]
+    steps = [
+        PolarionTestCase.Step("Step 1", "Expected 1"),
+        PolarionTestCase.Step("Step 2", "Expected 2"),
+    ]
 
     for i in range(len(steps)):
         assert steps[i].step == testcase.steps[i].step
@@ -114,10 +128,10 @@ def test_polarion_testcase_parser_custom_parameters(testcase):
     :param testcase:
     :return:
     """
-    assert testcase.project == 'ENTMQIC'
-    assert testcase.status == 'draft'
-    assert testcase.positive == 'positive'
-    assert testcase.automated == 'automated'
-    assert testcase.lookup_method == 'name'
-    assert testcase.subtype1 == 'compliance'
-    assert testcase.subtype2 == '-'
+    assert testcase.project == "ENTMQIC"
+    assert testcase.status == "draft"
+    assert testcase.positive == "positive"
+    assert testcase.automated == "automated"
+    assert testcase.lookup_method == "name"
+    assert testcase.subtype1 == "compliance"
+    assert testcase.subtype2 == "-"

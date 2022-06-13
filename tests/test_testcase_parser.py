@@ -9,6 +9,7 @@ from metacase.adapter import AdapterTest
 Validates if FMF Test Cases are being parsed as expected.
 """
 
+
 @pytest.fixture(scope="module")
 def testcase(request) -> TestCase:
     """
@@ -17,7 +18,9 @@ def testcase(request) -> TestCase:
     :return:
     """
     fmf_adapter = AdapterTest(os.path.dirname(os.path.abspath(__file__)))
-    tc = fmf_adapter.get_testcase('test_path.some_test_class.foo_test.TestFoo', 'test_foo_sample_01')
+    tc = fmf_adapter.get_testcase(
+        "test_path.some_test_class.foo_test.TestFoo", "test_foo_sample_01"
+    )
     return tc
 
 
@@ -27,7 +30,10 @@ def test_testcase_parser_test_identification(testcase):
     :param testcase:
     :return:
     """
-    assert testcase.name == "/test_path/some_test_class/foo_test/TestFoo/test_foo_sample_01"
+    assert (
+        testcase.name
+        == "/test_path/some_test_class/foo_test/TestFoo/test_foo_sample_01"
+    )
     assert testcase.summary == "This is the summary"
     assert testcase.description == "This is the description"
     assert "TAG1" in testcase.tags
@@ -87,12 +93,18 @@ def test_testcase_parser_test_relationships(testcase):
     :param testcase:
     :return:
     """
-    defects = [{'polarion': 'ENTMQIC-1111', 'customer-case': True}, {'jira': 'ENTMQIC-2222'}]
+    defects = [
+        {"polarion": "ENTMQIC-1111", "customer-case": True},
+        {"jira": "ENTMQIC-2222"},
+    ]
     assert defects[0] in testcase.defects
     assert defects[1] in testcase.defects
     assert len(testcase.defects) == 2
 
-    requirements = [{'polarion': 'ENTMQIC-3333', 'customer-case': True}, {'jira': 'ENTMQIC-4444'}]
+    requirements = [
+        {"polarion": "ENTMQIC-3333", "customer-case": True},
+        {"jira": "ENTMQIC-4444"},
+    ]
     assert requirements[0] in testcase.requirements
     assert requirements[1] in testcase.requirements
     assert len(testcase.requirements) == 2
@@ -132,12 +144,9 @@ def test_testcase_parser_test_testsuite(testcase: TestCase):
     :param testcase:
     :return:
     """
-    exp_parameters = ['PARAM1', 'PARAM2']
-    exp_properties = {
-        'property1': 'value1',
-        'property2': 'value2'
-    }
-    exp_topologies = ['TOPO1', 'TOPO2']
+    exp_parameters = ["PARAM1", "PARAM2"]
+    exp_properties = {"property1": "value1", "property2": "value2"}
+    exp_topologies = ["TOPO1", "TOPO2"]
 
     assert exp_parameters == testcase.testsuite.parameters
     assert exp_properties == testcase.testsuite.properties

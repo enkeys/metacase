@@ -15,7 +15,9 @@ def polarion_config(request):
     :param request:
     :return:
     """
-    return PolarionConfig(os.path.dirname(os.path.abspath(__file__)) + '/metacase.config.ini')
+    return PolarionConfig(
+        os.path.dirname(os.path.abspath(__file__)) + "/metacase.config.ini"
+    )
 
 
 def test_polarion_config_parser(polarion_config):
@@ -24,7 +26,9 @@ def test_polarion_config_parser(polarion_config):
     :param polarion_config:
     :return:
     """
-    assert polarion_config.test_case_url() == 'https://127.0.0.1/polarion/import/testcase'
-    assert polarion_config.test_run_url() == 'https://127.0.0.1/polarion/import/xunit'
-    assert polarion_config.username() == 'my_user'
-    assert polarion_config.password() == 'my_pass'
+    assert (
+        polarion_config.test_case_url() == "https://127.0.0.1/polarion/import/testcase"
+    )
+    assert polarion_config.test_run_url() == "https://127.0.0.1/polarion/import/xunit"
+    assert polarion_config.username() == "my_user"
+    assert polarion_config.password() == "my_pass"

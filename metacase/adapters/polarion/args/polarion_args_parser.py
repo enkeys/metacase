@@ -4,9 +4,11 @@ import sys
 
 from metacase.adapters.polarion.utils.polarion_config import PolarionConfig
 from metacase.adapter import AdapterArgParser
+
 """
 Argument parser for the FMF Polarion Adapter.
 """
+
 
 class PolarionArgParser(AdapterArgParser):
     """
@@ -27,19 +29,33 @@ class PolarionArgParser(AdapterArgParser):
         :return:
         """
         group = parser.add_mutually_exclusive_group(required=True)
-        group.add_argument("-c", "--config",
-                           help="Polarion config file")
-        group.add_argument("--generate-config",
-                           help="Generate a sample config file using provided file name")
-        parser.add_argument("--submit", action="store_true",
-                            help="If specified, submits all matching test cases into Polarion, "
-                                 "otherwise converted test cases will simply get logged.")
-        parser.add_argument("--one-by-one", action="store_true", dest='one_by_one',
-                            help="If set to true, all test cases will be send to Polarion one by one.")
-        parser.add_argument("--jira-populate-tc", action="store_true",
-                            help="Populate Test Work Item in JIRA if linked defect is present")
-        parser.add_argument("--jira-config", action="store",
-                            help="Provide configuration file for JIRA project")
+        group.add_argument("-c", "--config", help="Polarion config file")
+        group.add_argument(
+            "--generate-config",
+            help="Generate a sample config file using provided file name",
+        )
+        parser.add_argument(
+            "--submit",
+            action="store_true",
+            help="If specified, submits all matching test cases into Polarion, "
+            "otherwise converted test cases will simply get logged.",
+        )
+        parser.add_argument(
+            "--one-by-one",
+            action="store_true",
+            dest="one_by_one",
+            help="If set to true, all test cases will be send to Polarion one by one.",
+        )
+        parser.add_argument(
+            "--jira-populate-tc",
+            action="store_true",
+            help="Populate Test Work Item in JIRA if linked defect is present",
+        )
+        parser.add_argument(
+            "--jira-config",
+            action="store",
+            help="Provide configuration file for JIRA project",
+        )
 
     def parse_arguments(self, parsed_arguments: argparse.Namespace):
         """
@@ -78,10 +94,16 @@ class PolarionArgParser(AdapterArgParser):
             print("Unable to generate config file. Provided file name already exists.")
             sys.exit(1)
 
-        with open(config_file, 'w') as cfg:
+        with open(config_file, "w") as cfg:
             cfg.write("[%s]\n" % PolarionConfig.KEY_SECTION)
-            cfg.write("%s=https://127.0.0.1/polarion/import/testcase\n" % PolarionConfig.KEY_TC_URL)
-            cfg.write("%s=https://127.0.0.1/polarion/import/xunit\n" % PolarionConfig.KEY_XUNIT_URL)
+            cfg.write(
+                "%s=https://127.0.0.1/polarion/import/testcase\n"
+                % PolarionConfig.KEY_TC_URL
+            )
+            cfg.write(
+                "%s=https://127.0.0.1/polarion/import/xunit\n"
+                % PolarionConfig.KEY_XUNIT_URL
+            )
             cfg.write("%s=user\n" % PolarionConfig.KEY_USER)
             cfg.write("%s=pass\n" % PolarionConfig.KEY_PASS)
             cfg.close()

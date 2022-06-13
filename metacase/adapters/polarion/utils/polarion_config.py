@@ -10,11 +10,12 @@ class PolarionConfig(object):
     PolarionConfig represents data that must be provided through
     config (ini) file (to enable communication with the polarion importer APIs)
     """
-    KEY_SECTION = 'polarion'
-    KEY_TC_URL = 'TestCaseImporterUrl'
-    KEY_XUNIT_URL = 'XunitImporterUrl'
-    KEY_USER = 'user'
-    KEY_PASS = 'pass'
+
+    KEY_SECTION = "polarion"
+    KEY_TC_URL = "TestCaseImporterUrl"
+    KEY_XUNIT_URL = "XunitImporterUrl"
+    KEY_USER = "user"
+    KEY_PASS = "pass"
 
     def __init__(self, config_file):
         self.config = configparser.ConfigParser()
